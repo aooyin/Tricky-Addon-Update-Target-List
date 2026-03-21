@@ -25,7 +25,7 @@ jobs:
       version_tag_exists: ${{ steps.check_tag.outputs.version_tag_exists }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           fetch-tags: true
@@ -65,11 +65,23 @@ jobs:
           # Push all commits
           git push --force
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 'latest'
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 'latest'
+          cache: 'pnpm'
+          cache-dependency-path: webui/pnpm-lock.yaml
+
       - name: Build WebUI
         run: |
           cd webui
-          npm ci
-          npm run build
+          pnpm install --frozen-lockfile
+          pnpm build
 
       - name: Extract Module Info
         id: extract_info
@@ -85,7 +97,7 @@ jobs:
           echo "VERSION=${MODULE_VERSION}" >> $GITHUB_ENV
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: module/
@@ -113,7 +125,7 @@ jobs:
     if: ${{ needs.build.outputs.version_tag_exists == 'false' && github.event_name != 'pull_request' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
