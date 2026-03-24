@@ -1,5 +1,5 @@
 MODPATH=${0%/*}
-PATH=$MODPATH/common/bin:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:$PATH
+PATH=$MODPATH/common/bin:$PATH:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk
 HIDE_DIR="/data/adb/modules/.TA_utl"
 TS="/data/adb/modules/tricky_store"
 TSPA="/data/adb/modules/tsupport-advance"
@@ -103,4 +103,4 @@ echo "]" >> "$OUTPUT_APP"
 
 sh "$MODPATH/common/get_extra.sh" --xposed >/dev/null 2>&1 &
 
-[ -f "$MODPATH/action.sh" ] && rm -rf "/data/adb/modules/TA_utl"
+[ ! -f "$MODPATH/action.sh" ] || rm -rf "/data/adb/modules/TA_utl"
