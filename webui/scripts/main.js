@@ -422,19 +422,17 @@ document.querySelectorAll('md-dialog').forEach(dialog => {
 });
 
 // Initial load
-document.addEventListener('DOMContentLoaded', async () => {
-    document.querySelectorAll('[unresolved]').forEach(el => el.removeAttribute('unresolved'));
-    await loadTranslations();
-    await getBasePath();
-    checkMMRL();
-    getModuleVersion();
-    setupSystemAppMenu();
-    initCustomKeybox();
-    fetchAppList();
-    checkTrickyStoreVersion();
-    checkMagisk();
-    updateCheck();
-    securityPatch();
-    monitorDialogsAndLockScroll();
-    document.getElementById("refresh").onclick = refreshAppList;
-});
+document.querySelectorAll('[unresolved]').forEach(el => el.removeAttribute('unresolved'));
+await loadTranslations();
+await getBasePath();
+checkMMRL();
+getModuleVersion();
+setupSystemAppMenu();
+initCustomKeybox();
+fetchAppList();
+checkTrickyStoreVersion();
+checkMagisk();
+updateCheck();
+securityPatch();
+monitorDialogsAndLockScroll();
+document.getElementById("refresh").onclick = refreshAppList;
