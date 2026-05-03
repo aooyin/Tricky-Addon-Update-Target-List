@@ -71,7 +71,6 @@
     <string name="about_disclaimer">This module is not a part of the Tricky Store module. DO NOT report any issues to Tricky Store if encountered.</string>
     <string name="about_acknowledgment">Acknowledgment</string>
     <!-- Prompt -->
-    <string name="prompt_no_internet">Please check your Internet connection</string>
     <string name="prompt_aosp_key_set">AOSP keybox set successfully</string>
     <string name="prompt_key_set_error">Failed to update keybox</string>
     <string name="prompt_unknown_key_set">Unknown keybox set successfully</string>
@@ -98,6 +97,7 @@
     <string name="prompt_custom_key_set_error">Failed to set custom keybox</string>
     <string name="prompt_custom_saved">Custom keybox entry saved</string>
     <string name="prompt_custom_fetch_error">Failed to fetch keybox</string>
+    <string name="prompt_custom_not_found">No custom keybox found</string>
     <string name="prompt_custom_invalid_script">Script not allowed</string>
     <string name="prompt_custom_removed">Custom keybox entry removed</string>
     <string name="prompt_no_file_selected">No file selected</string>

@@ -62,8 +62,7 @@ export async function updateCheck() {
             }
         });
     } catch (error) {
-        console.error("Error fetching JSON or executing command:", error);
-        showPrompt(getString("prompt_no_internet"), false);
+        console.error("Error fetching update JSON or executing command:", error);
         connection = false;
     }
 }

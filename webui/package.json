@@ -15,7 +15,7 @@
   "dependencies": {
     "@material/web": "^2.4.1",
     "kernelsu-alt": "^2.1.2",
-    "marked": "^18.0.2",
+    "marked": "^18.0.3",
     "webuix": "^0.0.18"
   },
   "devDependencies": {

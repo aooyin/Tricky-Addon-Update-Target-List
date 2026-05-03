@@ -15,7 +15,7 @@ importers:
         specifier: ^2.1.2
         version: 2.1.2
       marked:
-        specifier: ^18.0.2
+        specifier: ^18.0.3
         version: 18.0.5
       webuix:
         specifier: ^0.0.18
