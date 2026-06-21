@@ -52,6 +52,7 @@
     <string name="menu_keybox_aosp">AOSP</string>
     <string name="menu_keybox_unknown">Unknown</string>
     <string name="menu_keybox_local">Local</string>
+    <string name="menu_keybox_repo">Repo</string>
     <string name="menu_set_verified_boot_hash">Set Verified Boot Hash</string>
     <string name="menu_set_security_patch">Set Security Patch</string>
     <string name="menu_set_devconfig">Set DevConfig</string>
@@ -100,6 +101,9 @@
     <string name="prompt_custom_not_found">No custom keybox found</string>
     <string name="prompt_custom_invalid_script">Script not allowed</string>
     <string name="prompt_custom_removed">Custom keybox entry removed</string>
+    <string name="prompt_keybox_repo_set">Keybox set from repo successfully</string>
+    <string name="prompt_keybox_repo_set_error">Failed to set keybox from repo</string>
+    <string name="prompt_keybox_repo_download_error">Download failed for %s</string>
     <string name="prompt_no_file_selected">No file selected</string>
     <string name="prompt_system_app_not_found">System app not found</string>
     <string name="prompt_system_app_error">Failed to add system app</string>

@@ -9,6 +9,7 @@ import { initCustomKeybox } from './custom_provider.js';
 import { searchInput } from './search_menu.js';
 import { updateCheck, connection } from './update.js';
 import { securityPatch } from './security_patch.js';
+import { close as closeKeyboxRepo, initKeyboxRepo } from './keybox_repo.js';
 
 // Loading, Save and Prompt Elements
 export const loadingIndicator = document.querySelector('.loading');
@@ -362,6 +363,11 @@ window.addEventListener('scroll', () => {
 });
 
 wx.on(window, 'back', () => {
+    const repoOverlay = document.getElementById('keybox-repo-overlay');
+    if (repoOverlay && !repoOverlay.classList.contains('hidden')) {
+        closeKeyboxRepo();
+        return;
+    }
     for (const dialog of document.querySelectorAll('md-dialog')) {
         if (dialog.open) {
             dialog.close();
@@ -429,6 +435,7 @@ checkMMRL();
 getModuleVersion();
 setupSystemAppMenu();
 initCustomKeybox();
+initKeyboxRepo();
 fetchAppList();
 checkTrickyStoreVersion();
 checkMagisk();
