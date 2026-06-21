@@ -9,6 +9,15 @@ Telegram channel: [KOW's Little World](https://t.me/kowchannel)
 
 ## Changelog
 
+### v4.4
+- This is last v4 release before v5 stable release, v5 will drop support for legacy KSU WebUI that doesn't support package manager api. This is a downgrade for existing v5 beta user.
+- **Script:** Fix uninstallation in overlayfs manager.
+- **Script:** Fix missing prop in sensitive props handling, support resetprop compact.
+- **WebUI:** Add community driven [keybox repo](https://keybox.kowx712.cc/) support, current valid keybox will be maintained less actively in the future.
+- **WebUI:** Improve rtl language support, update gitmirror link.
+- **WebUI:** Support custom keybox provider, allow fetching and decoding keybox from any url.
+- **WebUI:** Add Thai translation (@zr89-richter, #122).
+
 ### v4.3
 - **WebUI:** UI improvement: optimized dialog animation and menu appearence.
 - **WebUI:** Fixed fallback link not working, fixed no internet connection in some condition.
