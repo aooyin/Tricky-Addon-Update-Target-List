@@ -3,5 +3,7 @@
     "icon": "icon.png",
     "windowResize": false,
     "exitConfirm": false,
-    "backInterceptor": "javascript"
+    "contentSecurityPolicy": "*",
+    "backHandler": true,
+    "backInterceptor": "native"
 }
