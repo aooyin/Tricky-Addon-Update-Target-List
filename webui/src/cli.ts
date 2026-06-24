@@ -4,10 +4,14 @@ import { MOD_ID, OMK_MOD_ID, TS_MOD_ID } from './constant'
 
 export class Cli {
   static #basePathPromise: Promise<string> | null = null
+  static #managerPromise: Promise<string> | null = null
 
   constructor() {
     if (!Cli.#basePathPromise) {
       Cli.#basePathPromise = this.#resolveBasePath()
+    }
+    if (!Cli.#managerPromise) {
+      Cli.#managerPromise = this.#resolveManager()
     }
   }
 
@@ -15,9 +19,32 @@ export class Cli {
     return Cli.#basePathPromise!
   }
 
+  async getManager(): Promise<string> {
+    return Cli.#managerPromise!
+  }
+
+  async getManagerPath(): Promise<string> {
+    const manager = await this.getManager()
+    switch (manager) {
+      case 'MAGISK':
+        return '/data/adb/magisk'
+      case 'KSU':
+        return '/data/adb/ksu/bin'
+      case 'APATCH':
+        return '/data/adb/ap/bin'
+      default:
+        return '/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk'
+    }
+  }
+
   async #resolveBasePath(): Promise<string> {
     const exists = await File.exist(`/data/adb/modules/.${MOD_ID}`)
     return exists ? `/data/adb/modules/.${MOD_ID}` : `/data/adb/modules/${MOD_ID}`
+  }
+
+  async #resolveManager(): Promise<string> {
+    const basePath = await this.getBasePath()
+    return (await this.grepProp('MANAGER', `${basePath}/common/manager.sh`)) || ''
   }
 
   async grepProp(key: string, filePath: string): Promise<string | null> {
@@ -60,10 +87,11 @@ export class Cli {
   }
 
   async downloadFile(url: string, destPath: string): Promise<void> {
+    const managerPath = await this.getManagerPath()
     return new Promise((resolve, reject) => {
       const tryCurl = () => {
         const curl = spawn('curl', ['--connect-timeout', '10', '-L', '-s', '-o', destPath, url],
-          { env: { PATH: "$PATH:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/data/data/com.termux/files/usr/bin" }})
+          { env: { PATH: `$PATH:${managerPath}:/data/data/com.termux/files/usr/bin` }})
         curl.on('exit', (code) => {
           if (code === 0) resolve()
           else tryWget()
@@ -72,7 +100,7 @@ export class Cli {
       }
       const tryWget = () => {
         const wget = spawn('busybox', ['wget', '-T', '10', '--no-check-certificate', '-qO', destPath, url],
-          { env: { PATH: "$PATH:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/data/data/com.termux/files/usr/bin" }})
+          { env: { PATH: `$PATH:${managerPath}:/data/data/com.termux/files/usr/bin` }})
         wget.on('exit', (code) => {
           if (code === 0) resolve()
           else reject(new Error(`downloadFile failed: wget exit(${code})`))
@@ -91,11 +119,6 @@ export class Cli {
     }
   }
 
-  async getManager(): Promise<string> {
-    const basePath = await this.getBasePath()
-    return (await this.grepProp('MANAGER', `${basePath}/common/manager.sh`)) || ''
-  }
-
   async installModule(zipPath: string): Promise<boolean> {
     return this.#manageModule('install', zipPath)
   }
@@ -107,6 +130,7 @@ export class Cli {
   async #manageModule(option: 'install' | 'uninstall', module: string): Promise<boolean> {
     const basePath = await this.getBasePath()
     const manager = await this.getManager()
+    const managerPath = await this.getManagerPath()
 
     return new Promise((resolve, reject) => {
       let cmd: [string, string[]]
@@ -136,7 +160,7 @@ export class Cli {
       }
 
       let stdout = ''
-      const proc = spawn(cmd[0], cmd[1], { env: { PATH: "$PATH:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk" } })
+      const proc = spawn(cmd[0], cmd[1], { env: { PATH: `$PATH:${managerPath}` } })
       proc.stdout.on('data', (chunk: string) => stdout += chunk)
       proc.on('exit', (code: number | null) => {
         if (code === 0) {
@@ -160,11 +184,12 @@ export class Cli {
   }
 
   async setBootHash(hash: string): Promise<void> {
+    const managerPath = await this.getManagerPath()
     const result = await exec(`
       resetprop -n ro.boot.vbmeta.digest "${hash}"
       resetprop -c $(resetprop -Z ro.boot.vbmeta.digest) >/dev/null 2>&1 || true
       resetprop -c >/dev/null 2>&1 || true`,
-      { env: { PATH: "$PATH:/data/adb/ksu/bin:/data/adb/ap/bin:/data/adb/magisk" } })
+      { env: { PATH: `$PATH:${managerPath}` } })
     if (result.errno !== 0) throw new Error(`setBootHash failed (${result.errno})`)
   }
 
