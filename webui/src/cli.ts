@@ -160,7 +160,10 @@ export class Cli {
   }
 
   async setBootHash(hash: string): Promise<void> {
-    const result = await exec(`resetprop -n ro.boot.vbmeta.digest "${hash}" && resetprop -c || true`,
+    const result = await exec(`
+      resetprop -n ro.boot.vbmeta.digest "${hash}"
+      resetprop -c $(resetprop -Z ro.boot.vbmeta.digest) >/dev/null 2>&1 || true
+      resetprop -c >/dev/null 2>&1 || true`,
       { env: { PATH: "$PATH:/data/adb/ksu/bin:/data/adb/ap/bin:/data/adb/magisk" } })
     if (result.errno !== 0) throw new Error(`setBootHash failed (${result.errno})`)
   }
